@@ -12,7 +12,7 @@ passlib[bcrypt]~=1.7.4
 pathlib~=1.0.1
 pillow
 psycopg2-binary
-pydantic~=2.10.6
+pydantic~=2.10
 pydantic-settings~=2.7.1
 python-dateutil
 #python-dotenv
