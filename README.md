@@ -1,7 +1,7 @@
 # PROJECT DESCRIPTION
 
 ## Ready to set up the project:
-    git clone https://github.com/OforiPrescott/E.Church.git
+    git remote add origin https://github.com/Catalyst-OTU/eChurch.git
 
 
 
