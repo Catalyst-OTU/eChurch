@@ -3,7 +3,7 @@ bcrypt==4.0.1
 cloudinary
 fastapi~=0.115.8
 fastapi_jwt_auth
-fastapi_mail[handle]==6.8.1
+fastapi_mail[handle]==1.6.1
 google-cloud-storage
 jinja2~=3.1.5
 inflect~=7.5.0
