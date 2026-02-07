@@ -1,0 +1,80 @@
+## docker-compose.yml
+version: "3.8"
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - ${POSTGRES_PORT}:5432
+    networks:
+      - test_network
+
+  pgadmin4:
+    build:
+      context: .
+      dockerfile: dockerfile.pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:5050"
+    depends_on:
+      - postgres
+    networks:
+      - test_network
+    volumes:
+      - ./pgadmin_data:/var/lib/pgadmin/data
+
+  web:
+    build: ./app
+    env_file:
+      - .env
+    environment:
+      #DATABASE_URL: "postgres://postgres:password@postgres:5432/appraisal_db"
+      DATABASE_URL: 'postgres://${DB_USER}:${DB_PASSWORD}@${DB_SERVER}:${DB_PORT}/${DB_NAME}'
+    restart: always
+    depends_on:
+      - postgres
+    volumes:
+      - ./app:/app
+    ports:
+      - ${WEB_PORT}:8080
+    networks:
+      - test_network
+
+    
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - 8081:8080
+      - 5050
+      - 5432
+    networks: 
+      - test_network
+    # depends_on:
+    #   - ./nginx/ssl:/etc/letsencrypt/live/appraisal_dev.com
+    depends_on:
+      - web
+    volumes_from: 
+      - web
+
+networks:
+  test_network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
