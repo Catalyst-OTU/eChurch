@@ -3,8 +3,8 @@ from db.base_class import APIBase
 from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from domains.etransport.models.driver import Driver
-from domains.etransport.models.passenger import Passenger
+from domains.echurch.models.driver import Driver
+from domains.echurch.models.passenger import Passenger
 
 class User(APIBase):
     __table_args__ = {"schema": "public"}

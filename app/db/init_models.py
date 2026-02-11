@@ -42,22 +42,43 @@ def init_database():
 from domains.auth.models.refresh_token import RefreshToken
 from domains.auth.models.users import User
 from domains.auth.models.role_permissions import Role,Permission, role_permissions
-from domains.etransport.models.driver import Driver
-from domains.etransport.models.vehicle import Vehicle
-from domains.etransport.models.passenger import Passenger
-from domains.etransport.models.trip import Trip, TripCancellation
-from domains.etransport.models.rating import Rating
-from domains.etransport.models.transaction import Transaction
-from domains.etransport.models.admin_action_log import AdminActionLog
-from domains.etransport.models.notification import Notification
-from domains.etransport.models.chat import ChatMessage
+from domains.echurch.models.department import Department
+from domains.echurch.models.location import Location
+from domains.echurch.models.centre import Centre
+from domains.echurch.models.member import Member, Visitor
+from domains.echurch.models.staff import Staff
+from domains.echurch.models.group import Group, GroupMember, GroupAttendance
+from domains.echurch.models.attendance import MemberAttendance, FollowUpTemplate
+from domains.echurch.models.event import ChurchEvent
+from domains.echurch.models.finance import GivingTransaction, AuditLog
+from domains.echurch.models.messaging import OutboundMessage, OutboundMessageRecipient
+from domains.echurch.models.backup import BackupSnapshot
 
 def init_tables():
     selected_models = [
         Role,
+        Permission,
         User,
         RefreshToken,
-        Permission,
+
+        # E-Church domain
+        Department,
+        Location,
+        Centre,
+        Member,
+        Visitor,
+        Staff,
+        Group,
+        GroupMember,
+        GroupAttendance,
+        MemberAttendance,
+        FollowUpTemplate,
+        ChurchEvent,
+        GivingTransaction,
+        AuditLog,
+        OutboundMessage,
+        OutboundMessageRecipient,
+        BackupSnapshot,
         # Vehicle,
         # Driver,
         # Passenger,
@@ -78,5 +99,4 @@ def init_tables():
         # Ensure schema is set for the Table object
         role_permissions.schema = "public"
         role_permissions.create(bind=conn, checkfirst=True)
-
 
