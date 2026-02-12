@@ -157,6 +157,23 @@ def request_password_reset(
     return JSONResponse(content={"message": "Password reset link has been sent to your email."}, status_code=200)
 
 
+
+@users_router.get(
+    "/token/{token}",
+    # response_model=schemas.UserSchema
+)
+def check_user_reset_password_token(
+        *, db: Session = Depends(get_db),
+        # current_user: User = Depends(check_if_is_system_admin),
+        token: str
+) -> Any:
+    user = actions.get_user_by_reset_password_token(db=db, token=token)
+    return user
+
+
+
+
+
 @users_router.put(
     "/reset_password_token/{token}",
     response_model=schemas.UserSchema

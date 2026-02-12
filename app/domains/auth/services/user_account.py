@@ -109,6 +109,16 @@ class UserService:
             )
         self.repo.delete(db=db, id=id, soft=soft_delete)
         return get_user
+    
+    def get_user_by_reset_password_token(self, db: Session, token: str) -> None:
+        if not token: return None
+        db_token = db.query(User).filter(User.reset_password_token == token).first()
+        if not db_token:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid or expired reset password token"
+            )
+        return "Your token is valid. You can proceed to reset your password."
 
     def get_user_by_keywords(
             self, db: Session, *,

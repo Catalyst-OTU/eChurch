@@ -1,3 +1,4 @@
+import token
 from typing import Dict, Any, Union, Optional
 from fastapi.encoders import jsonable_encoder
 from pydantic import UUID4
@@ -7,8 +8,9 @@ from domains.auth.models.users import User
 from domains.auth.schemas.user_account import (
     UserCreate, UserUpdate
 )
+from fastapi import HTTPException, status
 from utils.security import pwd_context
-
+from domains.auth.models.users import User
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
@@ -25,6 +27,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def get_by_email(self, db: Session, email: str):
         return db.query(self.model).filter(self.model.email == email.strip()).first()
+
 
 
     def get_by_reset_password_token(self, db: Session, token: Any) -> Optional[ModelType]:
