@@ -59,10 +59,15 @@ class UserService:
         user_db.reset_password_token = token
         db.commit()
         #  Send email with the reset link
-        reset_link = f"{settings.FRONTEND_URL}/login/resetpassword?token={token}"
-
-        # email_data = send_reset_email(user_in.username, user_in.email, reset_link)
-        # Email.sendMailService(email_data, template_name='password_reset.html')
+        reset_link = f"{settings.FRONTEND_URL}/reset-password?token={token}"
+        from domains.auth.apis.login import send_reset_email
+        try:
+            email_data = send_reset_email(user_in.username, user_in.email, reset_link)
+            Email.sendMailService(email_data, template_name='password_reset.html')
+            
+        except Exception as email_error:
+            # Non-critical
+            print(f"Email failed: {email_error}")
         return user_db
 
     def create_organization_superuser(
@@ -95,9 +100,15 @@ class UserService:
         user = self.repo.get_by_id(db=db, id=id)
         return user
 
-    def delete_user(self, db: Session, *, id: UUID4) -> None:
-        self.repo.get_by_id(db=db, id=id)
-        self.repo.delete(db=db, id=id, soft=True)
+    def delete_user(self, db: Session, *, id: UUID4, soft_delete: bool) -> None:
+        get_user = self.repo.get_by_id(db=db, id=id)
+        if not get_user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found"
+            )
+        self.repo.delete(db=db, id=id, soft=soft_delete)
+        return get_user
 
     def get_user_by_keywords(
             self, db: Session, *,

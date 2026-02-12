@@ -7,7 +7,7 @@ from utils.pydantic_validators import check_non_empty_and_not_string
 
 class UserBase(BaseModel):
     email: Annotated[EmailStr, BeforeValidator(check_non_empty_and_not_string)]
-    #username: Optional[str] = None
+    username: Optional[str] = None
     reset_password_token: Optional[str] = None
     role_id: Optional[UUID4] = None
 

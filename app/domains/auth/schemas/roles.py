@@ -37,7 +37,8 @@ class RolePermissionsCreate(Role):
 
 
 class RolePermissionsCreate(Role):
-    permissions_ids: Optional[List[UUID4]] = Field(None, description="List of permission IDs to assign to the role.")
+    pass
+    # permissions_ids: Optional[List[UUID4]] = Field(None, description="List of permission IDs to assign to the role.")
 
 
 class RolePermissionsUpdate(Role):

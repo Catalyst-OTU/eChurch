@@ -12,7 +12,7 @@ from domains.auth.schemas.password_reset import ResetPasswordRequest
 class PasswordResetService:
     @staticmethod
     def generate_reset_token():
-        return ''.join(random.choices(string.ascii_letters + string.digits, k=50))
+        return ''.join(random.choices(string.ascii_letters + string.digits, k=250))
 
     @staticmethod
     def get_current_user_email(schemas: ResetPasswordRequest, db: Session = Depends(get_db)):

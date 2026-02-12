@@ -1,13 +1,15 @@
 from typing import List, Literal, Optional
 
+from domains.auth.schemas.user_account import UserCreate
+from domains.auth.models.users import User
 from fastapi import HTTPException, status
 from pydantic import UUID4
 from sqlalchemy import or_
 from sqlalchemy.orm import Session, aliased
-
+from domains.auth.services.user_account import users_forms_service
 from domains.echurch.models.department import Department
 from domains.echurch.models.group import Group, GroupMember
-from domains.echurch.models.member import Member, Visitor
+from domains.echurch.models.member import Member as MemberModel, Visitor
 from domains.echurch.repositories.member import member_repo, visitor_repo
 from domains.echurch.schemas.member import (
     MemberApprovalStatus,
@@ -20,6 +22,7 @@ from domains.echurch.schemas.member import (
     VisitorSchema,
     VisitorUpdate,
 )
+from domains.echurch.models.member import Member
 
 
 class MemberService:
@@ -36,7 +39,7 @@ class MemberService:
         search: Optional[str] = None,
         approval_status: Optional[MemberApprovalStatus] = None,
         department_id: Optional[UUID4] = None,
-        location_id: Optional[UUID4] = None,
+        user_id: Optional[UUID4] = None,
         centre_id: Optional[UUID4] = None,
         order_by: Optional[str] = None,
         order_direction: Literal["asc", "desc"] = "asc",
@@ -56,8 +59,8 @@ class MemberService:
             query = query.filter(Member.approval_status == approval_status)
         if department_id:
             query = query.filter(Member.department_id == department_id)
-        if location_id:
-            query = query.filter(Member.location_id == location_id)
+        if user_id:
+            query = query.filter(Member.user_id == user_id)
         if centre_id:
             query = query.filter(Member.centre_id == centre_id)
         if search:
@@ -97,7 +100,41 @@ class MemberService:
         return items
 
     def create_member(self, db: Session, *, data: MemberCreate) -> MemberSchema:
-        return self.repo.create(db=db, data=data, unique_fields=["email", "phone_number"])
+
+        user_payload = UserCreate(
+            email=data.email,
+            username=data.full_name,
+            role_id=data.role_id
+        )
+        user = users_forms_service.create_user(user_in=user_payload, db=db)
+        data.user_id = user.id
+        member_payload = MemberCreate(
+            full_name=data.full_name,
+            phone_number=data.phone_number,
+            email=data.email,
+            department_id=data.department_id,
+            user_id=data.user_id,
+            centre_id=data.centre_id,
+            picture_url=data.picture_url,
+            joined_date=data.joined_date,
+            approval_status=data.approval_status,
+            is_active=data.is_active
+        )
+        try:
+            member = self.repo.create(db=db, data=member_payload, unique_fields=["phone_number", "email"])
+            return member
+        except Exception as e:
+            # Rollback: delete the user if member creation fails
+            db.delete(user)
+            db.commit()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Failed to create member: {str(e)}"
+            )
+
+
+
+
 
     def update_member(self, db: Session, *, id: UUID4, data: MemberUpdate) -> MemberSchema:
         member = self.repo.get_by_id(db=db, id=id)

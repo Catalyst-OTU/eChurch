@@ -24,20 +24,24 @@ def get_db() -> Generator:
 
 def drop_and_alter_table_columns(db: Session):
     # the query execution
-    result = db.execute(text('SELECT username FROM users'))
-    org_names = result.scalars().all()
-    schema : str = "gi-kace"
-
-    if org_names:
-        # the execution of the DDL command
-        db.execute(text(f'ALTER TABLE "{schema}".appraisal_inputs ADD COLUMN title VARCHAR(100) default null'))
-        db.execute(text(f'ALTER TABLE "{schema}".appraisal_inputs ADD COLUMN description TEXT default null'))
-        db.execute(text(f'ALTER TABLE "{schema}".appraisal_inputs RENAME COLUMN appraisal_id to appraisal_section_id'))
-        db.execute(text(f'ALTER TABLE "{schema}".appraisal_inputs DROP CONSTRAINT appraisal_inputs_appraisal_id_fkey'))
-        db.execute(text(f'ALTER TABLE "{schema}".appraisal_inputs ADD CONSTRAINT appraisal_inputs_appraisal_section_id_fkey FOREIGN KEY (appraisal_section_id) REFERENCES "{schema}".appraisal_sections(id) ON DELETE SET NULL'))
-        db.commit()
-        print("Table altered successfully")
+    result = db.execute(text('SELECT email FROM public.users'))
+    set_results = result.scalars().all()
+    schema : str = "public"
+    
+    if set_results:
+        try:
+            # the execution of the DDL command
+            db.execute(text(f'ALTER TABLE "{schema}".users ADD COLUMN username VARCHAR(100) default null'))
+            # First add the user_id column to members table
+            db.execute(text(f'ALTER TABLE "{schema}".members ADD COLUMN user_id UUID'))
+            # Then add the foreign key constraint
+            db.execute(text(f'ALTER TABLE "{schema}".members ADD CONSTRAINT member_users_id_fkey FOREIGN KEY (user_id) REFERENCES "{schema}".users(id) ON DELETE SET NULL'))
+            db.commit()
+            print("Table altered successfully")
+        except Exception as e:
+            db.rollback()
+            print(f"Error altering table: {e}")
     else:
-        print("Table not found")
+        print("No results found, table alteration skipped")
 
 

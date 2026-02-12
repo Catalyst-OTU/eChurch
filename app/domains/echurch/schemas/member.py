@@ -1,11 +1,8 @@
 from datetime import date
-from typing import Annotated, List, Literal, Optional
-
+from typing import Annotated, Any, Any, List, Literal, Optional
 from pydantic import BaseModel, BeforeValidator, EmailStr, UUID4
-
 from db.schemas import BaseSchema
 from utils.pydantic_validators import check_non_empty_and_not_string
-
 from domains.echurch.schemas.centre import CentreBriefSchema
 from domains.echurch.schemas.department import DepartmentBriefSchema
 from domains.echurch.schemas.location import LocationBriefSchema
@@ -19,7 +16,7 @@ class MemberBase(BaseModel):
     phone_number: Optional[str] = None
     email: Optional[EmailStr] = None
     department_id: Optional[UUID4] = None
-    location_id: Optional[UUID4] = None
+    user_id: Optional[UUID4] = None
     centre_id: Optional[UUID4] = None
     picture_url: Optional[str] = None
     joined_date: Optional[date] = None
@@ -27,6 +24,8 @@ class MemberBase(BaseModel):
 
 class MemberCreate(MemberBase):
     approval_status: Optional[MemberApprovalStatus] = "pending"
+    role_id: Optional[Any] = None
+    user_id: Optional[UUID4] = None
     is_active: Optional[bool] = True
 
 
@@ -57,12 +56,23 @@ class MemberGroupInfoSchema(BaseModel):
     role_department_name: Optional[str] = None
 
 
+class RoleSchema(BaseModel):
+    id: UUID4
+    name: str
+
+class UserSchema(BaseModel):
+    id: UUID4
+    username: Optional[str] = None
+    email: EmailStr
+    is_active: bool = True
+    role: Optional[RoleSchema] = None
+
+    
 class MemberSchema(MemberBase, BaseSchema):
     approval_status: MemberApprovalStatus = "pending"
     is_active: bool = True
-
     department: Optional[DepartmentBriefSchema] = None
-    location: Optional[LocationBriefSchema] = None
+    user: Optional[UserSchema] = None
     centre: Optional[CentreBriefSchema] = None
 
 

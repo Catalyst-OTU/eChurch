@@ -38,32 +38,17 @@ def create_system_admin(db: Session):
 
     
         # Check if the System Administrator role exists
-    existing_driver_role = db.execute(select(Role).where(Role.name == "Driver"))
+    existing_driver_role = db.execute(select(Role).where(Role.name == "Member"))
     existing_driver_role = existing_driver_role.scalars().first()
 
     if not existing_driver_role:
-        add_driver_role = Role(id=uuid4(), name="Driver")
+        add_driver_role = Role(id=uuid4(), name="Member")
         db.add(add_driver_role)
         db.commit()
         db.refresh(add_driver_role)
     else:
         add_driver_role = existing_driver_role
 
-
-
-
-
-        # Check if the Passenger role exists
-    existing_passenger_role = db.execute(select(Role).where(Role.name == "Passenger"))
-    existing_passenger_role = existing_passenger_role.scalars().first()
-
-    if not existing_passenger_role:
-        add_passenger_role = Role(id=uuid4(), name="Passenger")
-        db.add(add_passenger_role)
-        db.commit()
-        db.refresh(add_passenger_role)
-    else:
-        add_passenger_role = existing_passenger_role
 
 
 

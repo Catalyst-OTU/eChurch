@@ -1,7 +1,5 @@
 from fastapi import APIRouter
 
-from .passenger import passengers_router
-from .driver import drivers_router
 from .departments import departments_router
 from .locations import locations_router
 from .centres import centres_router
@@ -14,10 +12,6 @@ from .messaging import messaging_router
 from .reports import reports_router
 from .dashboard import dashboard_router
 from .admin_tools import admin_tools_router
-
-etransport_router = APIRouter()
-etransport_router.include_router(drivers_router, tags=["DRIVERS ACCOUNT"])
-etransport_router.include_router(passengers_router, tags=["PASSENGERS ACCOUNT"])
 
 
 echurch_router = APIRouter(prefix="/echurch")

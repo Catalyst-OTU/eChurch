@@ -16,15 +16,8 @@ __all__ = [
     "OutboundMessage",
     "OutboundMessageRecipient",
     "BackupSnapshot",
-    "Driver",
-    "Vehicle",
-    "Passenger",
-    "Trip",
-    "Rating",
-    "Transaction",
     "AdminActionLog",
     "Notification",
-    "ChatMessage",
 ]
 
 from .department import Department
@@ -38,13 +31,5 @@ from .event import ChurchEvent
 from .finance import GivingTransaction, AuditLog
 from .messaging import OutboundMessage, OutboundMessageRecipient
 from .backup import BackupSnapshot
-
-from .driver import Driver
-from .vehicle import Vehicle
-from .passenger import Passenger
-from .trip import Trip
-from .rating import Rating
-from .transaction import Transaction
 from .admin_action_log import AdminActionLog
 from .notification import Notification
-from .chat import ChatMessage

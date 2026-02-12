@@ -40,12 +40,12 @@
       border-radius: 15px;
       padding: 30px;
       text-align: left;
-      border: 2px solid #28a745;
-      box-shadow: 0 2px 10px rgba(40, 167, 69, 0.1);
+      border: 2px solid #007bff;
+      box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
     }
-    .welcome-badge {
+    .notification-badge {
       display: inline-block;
-      background-color: #28a745;
+      background-color: #007bff;
       color: white;
       padding: 8px 16px;
       border-radius: 20px;
@@ -59,7 +59,7 @@
       border-radius: 8px;
       padding: 20px;
       margin: 20px 0;
-      border-left: 4px solid #28a745;
+      border-left: 4px solid #007bff;
     }
     .info-row {
       display: flex;
@@ -80,7 +80,7 @@
     .button {
       display: inline-block;
       border: none;
-      background-color: #28a745;
+      background-color: #007bff;
       color: white;
       width: 200px;
       line-height: 24px;
@@ -93,7 +93,7 @@
       transition: background-color 0.3s ease;
     }
     .button:hover {
-      background-color: #218838;
+      background-color: #0056b3;
     }
     .footer {
       margin-top: 30px;
@@ -103,18 +103,18 @@
       font-size: 14px;
     }
     .highlight {
-      background-color: #d4edda;
-      border: 1px solid #c3e6cb;
+      background-color: #d1ecf1;
+      border: 1px solid #bee5eb;
       border-radius: 5px;
       padding: 15px;
       margin: 20px 0;
     }
-    .security-box {
-      background: #e8f5e8;
+    .action-box {
+      background: #e7f3ff;
       border-radius: 8px;
       padding: 20px;
       margin: 20px 0;
-      border-left: 4px solid #28a745;
+      border-left: 4px solid #007bff;
     }
     @media only screen and (max-width: 600px) {
       .container {
@@ -142,81 +142,86 @@
   <div class="background">
     <div class="container">
       <div class="header">
-        <img src="{{system_logo}}" alt="Organization Logo" class="logo">
+        <img src="{{organization_logo}}" alt="Organization Logo" class="logo">
       </div>
       <h1 style="background-color: rgba(0, 53, 102, 1); padding: 10px 15px; border-radius: 8px; color: white; margin-bottom: 30px;">{{app_name}}</h1>
       
       <div class="content">
         <div style="text-align: center; margin-bottom: 30px;">
-          <div class="welcome-badge">🎉 Welcome</div>
-          <h2 style="color: #28a745; margin: 10px 0;">Organization Setup Complete</h2>
+          <div class="notification-badge">📋 New Submission</div>
+          <h2 style="color: #007bff; margin: 10px 0;">Appraisal Submission Alert</h2>
         </div>
         
         <div class="highlight">
           <p style="margin: 0; font-size: 16px; line-height: 1.6;">
-            <strong>Congratulations!</strong> Your organization has been successfully created and is ready for use.
+            <strong>{{appraisee_name}}</strong> has submitted their appraisal for your review.
           </p>
           <p style="margin: 10px 0 0 0; color: #495057;">
-            To get started, you need to set up your administrator password to access the application.
+            Please review the submission and provide your feedback as soon as possible.
           </p>
         </div>
 
         <div class="info-section">
-          <h3 style="color: #495057; margin-top: 0;">Account Setup</h3>
+          <h3 style="color: #495057; margin-top: 0;">Submission Details</h3>
           
           <div class="info-row">
-            <span class="info-label">Application:</span>
-            <span class="info-value">{{app_name}}</span>
+            <span class="info-label">Staff Member:</span>
+            <span class="info-value">{{appraisee_name}}</span>
           </div>
           
           <div class="info-row">
-            <span class="info-label">Account Type:</span>
-            <span class="info-value">Administrator</span>
+            <span class="info-label">Appraisal Section:</span>
+            <span class="info-value">{{appraisal_section}}</span>
+          </div>
+          
+          <div class="info-row">
+            <span class="info-label">Submitted On:</span>
+            <span class="info-value">{{submitted_at}}</span>
           </div>
           
           <div class="info-row">
             <span class="info-label">Status:</span>
-            <span class="info-value" style="color: #28a745; font-weight: bold;">Ready for Setup</span>
+            <span class="info-value" style="color: #007bff; font-weight: bold;">Pending Review</span>
           </div>
         </div>
 
-        <div class="security-box">
-          <h4 style="color: #155724; margin-top: 0;">Security Notice</h4>
-          <p style="color: #155724; margin: 0; line-height: 1.6;">
-            This is a secure password setup link. Please ensure you're setting up your password in a private environment. 
-            The link will expire for security purposes.
+        <div class="action-box">
+          <h4 style="color: #495057; margin-top: 0;">Required Action</h4>
+          <p style="color: #495057; margin: 0; line-height: 1.6;">
+            As the supervisor, you are required to review this appraisal submission and provide appropriate feedback. 
+            Please ensure timely review to maintain the appraisal process efficiency.
           </p>
         </div>
 
         <div style="text-align: center; margin: 30px 0;">
           <p style="font-size: 16px; color: #495057; margin-bottom: 20px;">
-            Click the button below to set up your administrator password:
+            Click the button below to access the appraisal system and review the submission:
           </p>
           
-          <a href="{{reset_link}}" 
+          <a href="{{app_URL}}" 
              target="_blank"
              class="button">
-            Set Password
+            Review Appraisal
           </a>
         </div>
 
-        <div style="background: #e8f5e8; border-radius: 8px; padding: 20px; margin: 20px 0;">
-          <h4 style="color: #155724; margin-top: 0;">Next Steps</h4>
-          <ul style="color: #155724; text-align: left; margin: 0; padding-left: 20px;">
-            <li>Set a strong, secure password</li>
-            <li>Log in to your administrator dashboard</li>
-            <li>Configure your organization settings</li>
-            <li>Add staff members and departments</li>
-            <li>Set up appraisal cycles and forms</li>
+        <div style="background: #e7f3ff; border-radius: 8px; padding: 20px; margin: 20px 0;">
+          <h4 style="color: #0056b3; margin-top: 0;">Review Guidelines</h4>
+          <ul style="color: #0056b3; text-align: left; margin: 0; padding-left: 20px;">
+            <li>Review all submitted information thoroughly</li>
+            <li>Provide constructive feedback and comments</li>
+            <li>Set appropriate status (Approved/Pending/Rejected)</li>
+            <li>Ensure all required fields are completed</li>
+            <li>Submit your review within the designated timeframe</li>
           </ul>
         </div>
 
         <div class="footer">
           <p style="margin: 0;">
-            If you're having trouble clicking the "Set Administrator Password" button, copy and paste the following URL into your web browser:
+            If you're having trouble clicking the "Review Appraisal" button, copy and paste the following URL into your web browser:
           </p>
           <p style="margin: 10px 0 0 0; word-break: break-all; color: #007bff;">
-            {{reset_link}}
+            {{app_URL}}
           </p>
           <p style="margin: 20px 0 0 0; font-size: 12px; color: #6c757d;">
             This is an automated notification from {{app_name}}. Please do not reply to this email.

@@ -125,14 +125,16 @@ def get_user(
 
 @users_router.delete(
     "/{id}",
-    response_model=schemas.UserSchema
+    # response_model=schemas.UserSchema
 )
 def delete_user(
         *, db: Session = Depends(get_db),
         current_user: User = Depends(check_if_is_system_admin),
-        id: UUID4
+        id: UUID4,
+        soft_delete: bool = True
 ) -> None:
-    actions.delete_user(db=db, id=id)
+    user = actions.delete_user(db=db, id=id, soft_delete=soft_delete)
+    return user
 
 
 @users_router.post(

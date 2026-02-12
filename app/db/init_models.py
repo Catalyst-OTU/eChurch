@@ -79,16 +79,7 @@ def init_tables():
         OutboundMessage,
         OutboundMessageRecipient,
         BackupSnapshot,
-        # Vehicle,
-        # Driver,
-        # Passenger,
-        # Trip,
-        # Rating,
-        # Transaction,
-        # AdminActionLog,
-        # Notification,
-        # TripCancellation,
-        # ChatMessage
+
     ]
 
     with engine.begin() as conn:

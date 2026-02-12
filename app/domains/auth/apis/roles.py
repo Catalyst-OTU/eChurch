@@ -22,7 +22,7 @@ role_router = APIRouter(
 @role_router.post("/", response_model=schemas.RoleSchema)
 def create_role(
                     *, db: Session = Depends(get_db),
-                    #current_user: User = Depends(get_current_user),
+                    current_user: User = Depends(get_current_user),
                     data: schemas.RolePermissionsCreate, 
                     
                       ):

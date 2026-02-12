@@ -40,13 +40,13 @@
       border-radius: 15px;
       padding: 30px;
       text-align: left;
-      border: 2px solid #28a745;
-      box-shadow: 0 2px 10px rgba(40, 167, 69, 0.1);
+      border: 2px solid #ffc107;
+      box-shadow: 0 2px 10px rgba(255, 193, 7, 0.1);
     }
-    .welcome-badge {
+    .status-badge {
       display: inline-block;
-      background-color: #28a745;
-      color: white;
+      background-color: #ffc107;
+      color: #212529;
       padding: 8px 16px;
       border-radius: 20px;
       font-weight: bold;
@@ -59,7 +59,7 @@
       border-radius: 8px;
       padding: 20px;
       margin: 20px 0;
-      border-left: 4px solid #28a745;
+      border-left: 4px solid #ffc107;
     }
     .info-row {
       display: flex;
@@ -80,8 +80,8 @@
     .button {
       display: inline-block;
       border: none;
-      background-color: #28a745;
-      color: white;
+      background-color: #ffc107;
+      color: #212529;
       width: 200px;
       line-height: 24px;
       padding: 12px;
@@ -91,9 +91,10 @@
       text-decoration: none;
       margin: 20px 0;
       transition: background-color 0.3s ease;
+      font-weight: bold;
     }
     .button:hover {
-      background-color: #218838;
+      background-color: #e0a800;
     }
     .footer {
       margin-top: 30px;
@@ -103,18 +104,18 @@
       font-size: 14px;
     }
     .highlight {
-      background-color: #d4edda;
-      border: 1px solid #c3e6cb;
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
       border-radius: 5px;
       padding: 15px;
       margin: 20px 0;
     }
-    .security-box {
-      background: #e8f5e8;
+    .alert-box {
+      background: #f8f9fa;
       border-radius: 8px;
       padding: 20px;
       margin: 20px 0;
-      border-left: 4px solid #28a745;
+      border-left: 4px solid #6c757d;
     }
     @media only screen and (max-width: 600px) {
       .container {
@@ -142,81 +143,99 @@
   <div class="background">
     <div class="container">
       <div class="header">
-        <img src="{{system_logo}}" alt="Organization Logo" class="logo">
+        <img src="{{organization_logo}}" alt="Organization Logo" class="logo">
       </div>
       <h1 style="background-color: rgba(0, 53, 102, 1); padding: 10px 15px; border-radius: 8px; color: white; margin-bottom: 30px;">{{app_name}}</h1>
       
       <div class="content">
         <div style="text-align: center; margin-bottom: 30px;">
-          <div class="welcome-badge">🎉 Welcome</div>
-          <h2 style="color: #28a745; margin: 10px 0;">Organization Setup Complete</h2>
+          <div class="status-badge">⏳ {{status}}</div>
+          <h2 style="color: #856404; margin: 10px 0;">Appraisal Status Update</h2>
         </div>
         
         <div class="highlight">
           <p style="margin: 0; font-size: 16px; line-height: 1.6;">
-            <strong>Congratulations!</strong> Your organization has been successfully created and is ready for use.
+            <strong>Your appraisal has been reviewed, and changes have been requested.</strong>
+            <!-- <strong>Your appraisal has been reviewed and is currently {{status.lower()}}.</strong> -->
           </p>
-          <p style="margin: 10px 0 0 0; color: #495057;">
-            To get started, you need to set up your administrator password to access the application.
+          <!-- {% if supervisor_comments %}
+          <p style="margin: 10px 0 0 0; font-style: italic; color: #495057;">
+            "{{supervisor_comments}}"
           </p>
+          {% endif %} -->
         </div>
 
         <div class="info-section">
-          <h3 style="color: #495057; margin-top: 0;">Account Setup</h3>
+          <h3 style="color: #495057; margin-top: 0;">Appraisal Details</h3>
           
           <div class="info-row">
-            <span class="info-label">Application:</span>
-            <span class="info-value">{{app_name}}</span>
+            <span class="info-label">Appraisal Section:</span>
+            <span class="info-value">{{appraisal_section}}</span>
           </div>
           
           <div class="info-row">
-            <span class="info-label">Account Type:</span>
-            <span class="info-value">Administrator</span>
+            <span class="info-label">Current Status:</span>
+            <span class="info-value" style="color: #856404; font-weight: bold;">Changes Requested</span>
+            <!-- <span class="info-value" style="color: #856404; font-weight: bold;">{{status}}</span> -->
           </div>
           
           <div class="info-row">
-            <span class="info-label">Status:</span>
-            <span class="info-value" style="color: #28a745; font-weight: bold;">Ready for Setup</span>
+            <span class="info-label">Reviewed By:</span>
+            <span class="info-value">{{supervisor_name}}</span>
           </div>
+          
+          {% if submitted_at %}
+          <div class="info-row">
+            <span class="info-label">Submitted On:</span>
+            <span class="info-value">{{submitted_at}}</span>
+          </div>
+          {% endif %}
+          
+          {% if approved_at %}
+          <div class="info-row">
+            <span class="info-label">Last Updated:</span>
+            <span class="info-value">{{approved_at}}</span>
+          </div>
+          {% endif %}
         </div>
 
-        <div class="security-box">
-          <h4 style="color: #155724; margin-top: 0;">Security Notice</h4>
-          <p style="color: #155724; margin: 0; line-height: 1.6;">
-            This is a secure password setup link. Please ensure you're setting up your password in a private environment. 
-            The link will expire for security purposes.
+        <div class="alert-box">
+          <h4 style="color: #495057; margin-top: 0;">What does Changes Requested mean?</h4>
+          <p style="color: #495057; margin: 0; line-height: 1.6;">
+        Changes Requested indicates that your appraisal has been reviewed, but additional information or adjustments are needed before it can proceed. 
+        Your supervisor may require clarification, further details, or updates to certain sections of your submission. 
+        Please review the feedback provided, make the necessary changes, and resubmit for approval
           </p>
         </div>
 
         <div style="text-align: center; margin: 30px 0;">
           <p style="font-size: 16px; color: #495057; margin-bottom: 20px;">
-            Click the button below to set up your administrator password:
+            Click the button below to view your appraisal details and current status:
           </p>
           
-          <a href="{{reset_link}}" 
+          <a href="{{app_URL}}" 
              target="_blank"
              class="button">
-            Set Password
+            View Appraisal Details
           </a>
         </div>
 
-        <div style="background: #e8f5e8; border-radius: 8px; padding: 20px; margin: 20px 0;">
-          <h4 style="color: #155724; margin-top: 0;">Next Steps</h4>
-          <ul style="color: #155724; text-align: left; margin: 0; padding-left: 20px;">
-            <li>Set a strong, secure password</li>
-            <li>Log in to your administrator dashboard</li>
-            <li>Configure your organization settings</li>
-            <li>Add staff members and departments</li>
-            <li>Set up appraisal cycles and forms</li>
+        <div style="background: #fff3cd; border-radius: 8px; padding: 20px; margin: 20px 0;">
+          <h4 style="color: #856404; margin-top: 0;">What to Expect</h4>
+          <ul style="color: #856404; text-align: left; margin: 0; padding-left: 20px;">
+            <li>Your supervisor has requested additional information, updates, or clarification</li>
+            <li>The status will be updated once the required changes are reviewed and approved</li>
+            <li>Chekc your appraisal and resolve any comment from your supervisor</li>
+            <li>Please check back regularly to track the progress of your appraisal</li>
           </ul>
         </div>
 
         <div class="footer">
           <p style="margin: 0;">
-            If you're having trouble clicking the "Set Administrator Password" button, copy and paste the following URL into your web browser:
+            If you're having trouble clicking the "View Appraisal Details" button, copy and paste the following URL into your web browser:
           </p>
           <p style="margin: 10px 0 0 0; word-break: break-all; color: #007bff;">
-            {{reset_link}}
+            {{app_URL}}
           </p>
           <p style="margin: 20px 0 0 0; font-size: 12px; color: #6c757d;">
             This is an automated notification from {{app_name}}. Please do not reply to this email.
@@ -226,4 +245,4 @@
     </div>
   </div>
 </body>
-</html>
+</html> 
