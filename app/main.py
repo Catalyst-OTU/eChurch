@@ -26,7 +26,7 @@ def initial_data_insert():
     """Insert initial data using synchronous session."""
     with SessionLocal() as db:
         create_system_admin(db)
-        drop_and_alter_table_columns(db)
+        # drop_and_alter_table_columns(db)
 
 
 
