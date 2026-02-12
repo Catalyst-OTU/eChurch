@@ -13,7 +13,7 @@ from domains.auth.respository.role import role_crud as role_repo
 from domains.auth.models.role_permissions import Role
 
 role_router = APIRouter(
-    prefix="/roles",
+    prefix="/echurch/roles",
     responses={status.HTTP_404_NOT_FOUND: {"description": "Not found"}},
 )
 

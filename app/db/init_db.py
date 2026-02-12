@@ -42,12 +42,12 @@ def create_system_admin(db: Session):
     existing_member_role = existing_member_role.scalars().first()
 
     if not existing_member_role:
-        add_driver_role = Role(id=uuid4(), name="Member")
-        db.add(add_driver_role)
+        member_role = Role(id=uuid4(), name="Member")
+        db.add(member_role)
         db.commit()
-        db.refresh(add_driver_role)
+        db.refresh(member_role)
     else:
-        add_driver_role = existing_member_role
+        member_role = existing_member_role
 
 
 
@@ -56,12 +56,12 @@ def create_system_admin(db: Session):
     existing_finance_manager_role = existing_finance_manager_role.scalars().first()
 
     if not existing_finance_manager_role:
-        system_admin_role = Role(id=uuid4(), name="Finance Manager")
-        db.add(system_admin_role)
+        finance_manager_role = Role(id=uuid4(), name="Finance Manager")
+        db.add(finance_manager_role)
         db.commit()
-        db.refresh(system_admin_role)
+        db.refresh(finance_manager_role)
     else:
-        system_admin_role = existing_finance_manager_role
+        finance_manager_role = existing_finance_manager_role
 
 
     
@@ -70,12 +70,12 @@ def create_system_admin(db: Session):
     existing_pastor_role = existing_pastor_role.scalars().first()
 
     if not existing_pastor_role:
-        add_driver_role = Role(id=uuid4(), name="Pastor")
-        db.add(add_driver_role)
+        pastor_role = Role(id=uuid4(), name="Pastor")
+        db.add(pastor_role)
         db.commit()
-        db.refresh(add_driver_role)
+        db.refresh(pastor_role)
     else:
-        add_driver_role = existing_pastor_role
+        pastor_role = existing_pastor_role
 
 
 
@@ -83,12 +83,12 @@ def create_system_admin(db: Session):
     existing_worker_role = existing_worker_role.scalars().first()
 
     if not existing_worker_role:
-        add_worker_role = Role(id=uuid4(), name="Worker")
-        db.add(add_worker_role)
+        worker_role = Role(id=uuid4(), name="Worker")
+        db.add(worker_role)
         db.commit()
-        db.refresh(add_worker_role)
+        db.refresh(worker_role)
     else:
-        add_worker_role = existing_worker_role
+        worker_role = existing_worker_role
 
 
 

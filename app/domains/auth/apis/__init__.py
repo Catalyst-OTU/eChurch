@@ -8,5 +8,5 @@ prefix = '/auth'
 auth_routers = APIRouter()
 auth_routers.include_router(auth_router, prefix=prefix, tags=['AUTHENTICATION'])
 auth_routers.include_router(logout_auth_router, prefix=prefix, tags=['AUTHENTICATION'])
-auth_routers.include_router(users_router, prefix=f'/users', tags=["USERS ACCOUNTS"])
+auth_routers.include_router(users_router, prefix=f'/echurch/users', tags=["USERS ACCOUNTS"])
 auth_routers.include_router(role_router, tags=["ROLES AND PERMISSIONS"])
