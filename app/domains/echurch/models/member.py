@@ -24,7 +24,7 @@ class Member(APIBase):
     department = relationship("Department", back_populates="members")
     location = relationship("Location", back_populates="members")
     centre = relationship("Centre", back_populates="members")
-    user_id = Column(UUID(as_uuid=True), ForeignKey("public.users.id"), nullable=False, unique=True, index=True)
+    # user_id = Column(UUID(as_uuid=True), ForeignKey("public.users.id"), nullable=False, unique=True, index=True)
 
     group_member = relationship("GroupMember", back_populates="member", uselist=False)
     attendances = relationship("MemberAttendance", back_populates="member")

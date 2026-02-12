@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 class User(APIBase):
     __table_args__ = {"schema": "public"}
-    username = Column(String(255), nullable=True)
+    # username = Column(String(255), nullable=True)
     email = Column(String(255), nullable=False)
     password = Column(String(255), nullable=True)
     reset_password_token = Column(String(255), nullable=True)
