@@ -17,7 +17,7 @@ from domains.auth.services.password_reset import password_reset_service
 from domains.auth.services.user_account import users_forms_service as actions
 from domains.auth.services.user_account import user_repo
 from services.email_service import Email
-from utils.rbac import check_if_is_system_admin, get_current_user_db
+from utils.rbac import get_current_user, get_current_user_db
 from utils.schemas import HTTPError
 
 
@@ -49,7 +49,7 @@ users_router = APIRouter(
 def list_users(
                     *, 
                     db: Session = Depends(get_db),
-                    current_user: User = Depends(check_if_is_system_admin),
+                    current_user: User = Depends(get_current_user),
                     skip: int = 0,
                     limit: int = 100,
                     order_by: str = None,
@@ -71,7 +71,7 @@ def list_users(
 # def list_users(
 #                     *, 
 #                     db: Session = Depends(get_db),
-#                     current_user: User = Depends(check_if_is_system_admin),
+#                     current_user: User = Depends(get_current_user),
                     
 #                     request: Request,
 #                      ) -> Any:
@@ -87,7 +87,7 @@ def list_users(
 def create_user(
         *,
         #organization_id: UUID4,
-        current_user: User = Depends(check_if_is_system_admin),
+        current_user: User = Depends(get_current_user),
         user_in: schemas.UserCreate,
         db: Session = Depends(get_db)
 ) -> Any:
@@ -102,7 +102,7 @@ def create_user(
 )
 def update_user(
         *, db: Session = Depends(get_db),
-        current_user: User = Depends(check_if_is_system_admin),
+        current_user: User = Depends(get_current_user),
         id: UUID4,
         user_in: schemas.UserUpdate,
 ) -> Any:
@@ -116,7 +116,7 @@ def update_user(
 )
 def get_user(
         *, db: Session = Depends(get_db),
-        current_user: User = Depends(check_if_is_system_admin),
+        current_user: User = Depends(get_current_user),
         id: UUID4
 ) -> Any:
     user = actions.get_user(db=db, id=id)
@@ -129,7 +129,7 @@ def get_user(
 )
 def delete_user(
         *, db: Session = Depends(get_db),
-        current_user: User = Depends(check_if_is_system_admin),
+        current_user: User = Depends(get_current_user),
         id: UUID4,
         soft_delete: bool = True
 ) -> None:
@@ -164,7 +164,7 @@ def request_password_reset(
 )
 def check_user_reset_password_token(
         *, db: Session = Depends(get_db),
-        # current_user: User = Depends(check_if_is_system_admin),
+        # current_user: User = Depends(get_current_user),
         token: str
 ) -> Any:
     user = actions.get_user_by_reset_password_token(db=db, token=token)

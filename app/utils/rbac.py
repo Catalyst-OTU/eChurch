@@ -54,13 +54,13 @@ def get_current_active_user(current_user: Annotated[User, Depends(get_current_us
         )
     return current_user
 
-def check_if_is_system_admin(
+def get_current_user(
         current_active_user: Annotated[User, Depends(get_current_user)],
         db: Session = Depends(get_current_user_db)
 ):
     check_user_role = db.query(Role).filter(Role.id == current_active_user.role_id).first()
 
-    if check_user_role.name == "System Administrator":
+    if check_user_role.name == "System Administrator" or check_user_role.name == "Super Administrator":
         return current_active_user
     
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, 

@@ -9,7 +9,7 @@ from pydantic import UUID4
 
 from domains.echurch.schemas.department import DepartmentCreate, DepartmentSchema, DepartmentUpdate
 from domains.echurch.services.department import department_service
-from utils.rbac import check_if_is_system_admin, get_current_user
+from utils.rbac import get_current_user, get_current_user
 
 
 departments_router = APIRouter(prefix="/departments", responses={404: {"description": "Not found"}})
@@ -34,7 +34,7 @@ def list_departments(
 def create_department(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: DepartmentCreate,
 ) -> Any:
     return department_service.create_department(db, data=data)
@@ -54,7 +54,7 @@ def get_department(
 def update_department(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     data: DepartmentUpdate,
 ) -> Any:
@@ -65,7 +65,7 @@ def update_department(
 def delete_department(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
 ) -> None:
     department_service.delete_department(db, id=id)

@@ -16,7 +16,7 @@ from domains.echurch.schemas.member import (
     VisitorUpdate,
 )
 from domains.echurch.services.member import member_service
-from utils.rbac import check_if_is_system_admin, get_current_user
+from utils.rbac import get_current_user, get_current_user
 
 
 members_router = APIRouter(prefix="/members", responses={404: {"description": "Not found"}})
@@ -55,7 +55,7 @@ def list_members(
 def create_member(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: MemberCreate,
 ) -> Any:
     return member_service.create_member(db, data=data)
@@ -75,7 +75,7 @@ def get_member(
 def update_member(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     data: MemberUpdate,
 ) -> Any:
@@ -86,7 +86,7 @@ def update_member(
 def delete_member(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     soft: bool = True,
 ) -> None:
@@ -97,7 +97,7 @@ def delete_member(
 def approve_member(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
 ) -> Any:
     return member_service.set_member_approval_status(db, id=id, approval_status="approved")
@@ -107,7 +107,7 @@ def approve_member(
 def reject_member(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
 ) -> Any:
     return member_service.set_member_approval_status(db, id=id, approval_status="rejected")
@@ -130,7 +130,7 @@ def list_visitors(
 def create_visitor(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: VisitorCreate,
 ) -> Any:
     return member_service.create_visitor(db, data=data)
@@ -140,7 +140,7 @@ def create_visitor(
 def update_visitor(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     data: VisitorUpdate,
 ) -> Any:
@@ -151,7 +151,7 @@ def update_visitor(
 def delete_visitor(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     soft: bool = True,
 ) -> None:

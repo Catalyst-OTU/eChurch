@@ -15,7 +15,7 @@ from domains.echurch.schemas.admin_tools import (
     UserRoleUpdateRequest,
 )
 from domains.echurch.services.admin_tools import admin_tools_service
-from utils.rbac import check_if_is_system_admin
+from utils.rbac import get_current_user
 
 
 admin_tools_router = APIRouter(prefix="/admin", responses={404: {"description": "Not found"}})
@@ -25,7 +25,7 @@ admin_tools_router = APIRouter(prefix="/admin", responses={404: {"description": 
 def list_user_roles(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     skip: int = 0,
     limit: int = 100,
 ) -> Any:
@@ -36,7 +36,7 @@ def list_user_roles(
 def update_user_role(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     user_id: UUID4,
     data: UserRoleUpdateRequest,
 ) -> Any:
@@ -47,7 +47,7 @@ def update_user_role(
 def create_backup(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: BackupCreateRequest,
 ) -> Any:
     return admin_tools_service.create_backup(db, data=data, current_user=current_user)
@@ -57,7 +57,7 @@ def create_backup(
 def list_backups(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     skip: int = 0,
     limit: int = 100,
 ) -> Any:
@@ -68,7 +68,7 @@ def list_backups(
 def get_backup_detail(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
 ) -> Any:
     return admin_tools_service.get_backup_detail(db, id=id)
@@ -78,7 +78,7 @@ def get_backup_detail(
 def restore_backup(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     file: UploadFile = File(...),
 ) -> Any:
     return admin_tools_service.restore_backup(db, file=file)

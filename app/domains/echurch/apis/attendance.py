@@ -13,7 +13,7 @@ from domains.echurch.schemas.attendance import (
     MemberAttendanceItem,
 )
 from domains.echurch.services.attendance import attendance_service
-from utils.rbac import check_if_is_system_admin, get_current_user
+from utils.rbac import get_current_user, get_current_user
 
 
 attendance_router = APIRouter(prefix="/attendance", responses={404: {"description": "Not found"}})
@@ -23,7 +23,7 @@ attendance_router = APIRouter(prefix="/attendance", responses={404: {"descriptio
 def save_attendance_entries(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: AttendanceEntryCreate,
 ) -> Any:
     return attendance_service.save_attendance_entries(db, data=data)
@@ -63,7 +63,7 @@ def get_follow_up_templates(
 def update_follow_up_template(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     channel: str,
     data: FollowUpTemplateUpdate,
 ) -> Any:

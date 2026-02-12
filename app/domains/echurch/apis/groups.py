@@ -17,7 +17,7 @@ from domains.echurch.schemas.group import (
     GroupUpdate,
 )
 from domains.echurch.services.group import group_service
-from utils.rbac import check_if_is_system_admin, get_current_user
+from utils.rbac import get_current_user, get_current_user
 
 
 groups_router = APIRouter(prefix="/groups", responses={404: {"description": "Not found"}})
@@ -43,7 +43,7 @@ def list_groups(
 def create_group(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: GroupCreate,
 ) -> Any:
     return group_service.create_group(db, data=data)
@@ -63,7 +63,7 @@ def get_group_detail(
 def update_group(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     data: GroupUpdate,
 ) -> Any:
@@ -74,7 +74,7 @@ def update_group(
 def delete_group(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
 ) -> None:
     group_service.delete_group(db, id=id)
@@ -84,7 +84,7 @@ def delete_group(
 def assign_member_to_group(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: GroupAssignMemberRequest,
 ) -> Any:
     group_service.assign_member(db, data=data)
@@ -95,7 +95,7 @@ def assign_member_to_group(
 def record_group_attendance(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: GroupAttendanceCreate,
 ) -> Any:
     return group_service.record_group_attendance(db, data=data)

@@ -9,7 +9,7 @@ from pydantic import UUID4
 
 from domains.echurch.schemas.location import LocationCreate, LocationSchema, LocationUpdate
 from domains.echurch.services.location import location_service
-from utils.rbac import check_if_is_system_admin, get_current_user
+from utils.rbac import get_current_user, get_current_user
 
 
 locations_router = APIRouter(prefix="/locations", responses={404: {"description": "Not found"}})
@@ -34,7 +34,7 @@ def list_locations(
 def create_location(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: LocationCreate,
 ) -> Any:
     return location_service.create_location(db, data=data)
@@ -54,7 +54,7 @@ def get_location(
 def update_location(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     data: LocationUpdate,
 ) -> Any:
@@ -65,7 +65,7 @@ def update_location(
 def delete_location(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
 ) -> None:
     location_service.delete_location(db, id=id)

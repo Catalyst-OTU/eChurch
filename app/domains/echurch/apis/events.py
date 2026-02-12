@@ -8,7 +8,7 @@ from db.session import get_db
 from domains.auth.models.users import User
 from domains.echurch.schemas.event import ChurchEventCreate, ChurchEventSchema, ChurchEventUpdate
 from domains.echurch.services.event import church_event_service
-from utils.rbac import check_if_is_system_admin, get_current_user
+from utils.rbac import get_current_user, get_current_user
 
 
 events_router = APIRouter(prefix="/events", responses={404: {"description": "Not found"}})
@@ -33,7 +33,7 @@ def list_events(
 def create_event(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: ChurchEventCreate,
 ) -> Any:
     return church_event_service.create_event(db, data=data)
@@ -53,7 +53,7 @@ def get_event(
 def update_event(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     data: ChurchEventUpdate,
 ) -> Any:
@@ -64,7 +64,7 @@ def update_event(
 def delete_event(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
 ) -> None:
     church_event_service.delete_event(db, id=id)

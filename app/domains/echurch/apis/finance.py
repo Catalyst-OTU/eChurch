@@ -15,7 +15,7 @@ from domains.echurch.schemas.finance import (
     GivingTransactionUpdate,
 )
 from domains.echurch.services.finance import finance_service
-from utils.rbac import check_if_is_system_admin, get_current_user
+from utils.rbac import get_current_user, get_current_user
 
 
 finance_router = APIRouter(prefix="/finance", responses={404: {"description": "Not found"}})
@@ -50,7 +50,7 @@ def list_transactions(
 def create_transaction(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: GivingTransactionCreate,
 ) -> Any:
     return finance_service.create_transaction(db, data=data)
@@ -60,7 +60,7 @@ def create_transaction(
 def update_transaction(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     data: GivingTransactionUpdate,
 ) -> Any:
@@ -71,7 +71,7 @@ def update_transaction(
 def refund_transaction(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
 ) -> Any:
     return finance_service.refund_transaction(db, id=id, current_user=current_user)
@@ -92,7 +92,7 @@ def list_finance_audit_logs(
 def export_transactions_csv(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     reference: Optional[str] = None,
 ) -> Response:
     transactions = finance_service.list_transactions(db, skip=0, limit=10000, reference=reference)

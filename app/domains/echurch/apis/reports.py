@@ -9,7 +9,7 @@ from domains.auth.models.users import User
 from domains.echurch.models.finance import AuditLog
 from domains.echurch.schemas.reports import ExportFormat, ReportResponse, ReportType
 from domains.echurch.services.reports import reports_service
-from utils.rbac import check_if_is_system_admin, get_current_user
+from utils.rbac import get_current_user, get_current_user
 
 
 reports_router = APIRouter(prefix="/reports", responses={404: {"description": "Not found"}})
@@ -30,7 +30,7 @@ def get_report(
 def export_report(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     report_type: ReportType,
     report_date: Optional[date] = None,
     format: ExportFormat = "csv",

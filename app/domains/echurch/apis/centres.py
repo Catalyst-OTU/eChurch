@@ -9,7 +9,7 @@ from pydantic import UUID4
 
 from domains.echurch.schemas.centre import CentreCreate, CentreSchema, CentreUpdate
 from domains.echurch.services.centre import centre_service
-from utils.rbac import check_if_is_system_admin, get_current_user
+from utils.rbac import get_current_user, get_current_user
 
 
 centres_router = APIRouter(prefix="/centres", responses={404: {"description": "Not found"}})
@@ -32,7 +32,7 @@ def list_centres(
 def create_centre(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     data: CentreCreate,
 ) -> Any:
     return centre_service.create_centre(db, data=data)
@@ -52,7 +52,7 @@ def get_centre(
 def update_centre(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
     data: CentreUpdate,
 ) -> Any:
@@ -63,7 +63,7 @@ def update_centre(
 def delete_centre(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(check_if_is_system_admin),
+    current_user: User = Depends(get_current_user),
     id: UUID4,
 ) -> None:
     centre_service.delete_centre(db, id=id)
